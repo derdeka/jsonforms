@@ -30,10 +30,7 @@ const REQUIRED_PROPERTIES = 'required';
 
 type Properties = { [property: string]: JsonSchema4 };
 
-const distinct = (
-  properties: any[],
-  discriminator: (item: any) => string
-): JsonSchema4[] => {
+const distinct = (properties: any[], discriminator: (item: any) => string): JsonSchema4[] => {
   const known: { [property: string]: boolean } = {};
 
   return properties.filter(item => {
@@ -48,8 +45,9 @@ const distinct = (
 };
 
 class Gen {
+
   constructor(
-    private findOption: (props: Properties) => (optionName: string) => any
+    private findOption: (props: Properties) => (optionName: string) => any,
   ) {}
 
   schemaObject = (data: Object): JsonSchema4 => {
@@ -111,9 +109,7 @@ class Gen {
   schemaArray = (data: any[]): JsonSchema4 => {
     if (data.length > 0) {
       const allProperties: JsonSchema4[] = data.map(this.property);
-      const uniqueProperties = distinct(allProperties, prop =>
-        JSON.stringify(prop)
-      );
+      const uniqueProperties = distinct(allProperties, prop => JSON.stringify(prop));
       if (uniqueProperties.length === 1) {
         return {
           type: 'array',
@@ -138,17 +134,13 @@ class Gen {
 
 /**
  * Generate a JSON schema based on the given data and any additional options.
+ * 
  * @param {Object} instance the data to create a JSON schema for
  * @param {any} options any additional options that may alter the generated JSON schema
  * @returns {JsonSchema} the generated schema
  */
-export const generateJsonSchema = (
-  instance: Object,
-  options: any = {}
-): JsonSchema4 => {
-  const findOption = (props: Properties) => (
-    optionName: string
-  ): boolean | string[] => {
+export const generateJsonSchema = (instance: Object, options: any = {}): JsonSchema4 => {
+  const findOption = (props: Properties) => (optionName: string): boolean | string[] => {
     switch (optionName) {
       case ADDITIONAL_PROPERTIES:
         if (options.hasOwnProperty(ADDITIONAL_PROPERTIES)) {

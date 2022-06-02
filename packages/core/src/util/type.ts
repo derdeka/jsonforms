@@ -208,10 +208,7 @@ export type Observer<T> = {
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S = any, A extends Action = AnyAction> = (
-  state: S | undefined,
-  action: A
-) => S;
+export type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefined, action: A) => S;
 
 // Copied from https://github.com/reduxjs/redux/blob/master/src/types/store.ts
 /**

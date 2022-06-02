@@ -25,70 +25,23 @@
 import 'hammerjs';
 import { RankedTester } from '@jsonforms/core';
 export * from './module';
-import {
-  BooleanControlRenderer,
-  booleanControlTester
-} from './controls/boolean.renderer';
-import {
-  TextControlRenderer,
-  TextControlRendererTester
-} from './controls/text.renderer';
-import {
-  TextAreaRenderer,
-  TextAreaRendererTester
-} from './controls/textarea.renderer';
-import {
-  NumberControlRenderer,
-  NumberControlRendererTester
-} from './controls/number.renderer';
-import {
-  RangeControlRenderer,
-  RangeControlRendererTester
-} from './controls/range.renderer';
-import {
-  DateControlRenderer,
-  DateControlRendererTester
-} from './controls/date.renderer';
-import {
-  ToggleControlRenderer,
-  ToggleControlRendererTester
-} from './controls/toggle.renderer';
-import {
-  AutocompleteControlRenderer,
-  enumControlTester
-} from './controls/autocomplete.renderer';
-import {
-  ObjectControlRenderer,
-  ObjectControlRendererTester
-} from './other/object.renderer';
-import {
-  VerticalLayoutRenderer,
-  verticalLayoutTester
-} from './layouts/vertical-layout.renderer';
-import {
-  HorizontalLayoutRenderer,
-  horizontalLayoutTester
-} from './layouts/horizontal-layout.renderer';
-
-import {
-  CategorizationTabLayoutRenderer,
-  categorizationTester
-} from './layouts/categorization-layout.renderer';
-
+import { BooleanControlRenderer, booleanControlTester } from './controls/boolean.renderer';
+import { TextControlRenderer, TextControlRendererTester } from './controls/text.renderer';
+import { TextAreaRenderer, TextAreaRendererTester } from './controls/textarea.renderer';
+import { NumberControlRenderer, NumberControlRendererTester } from './controls/number.renderer';
+import { RangeControlRenderer, RangeControlRendererTester } from './controls/range.renderer';
+import { DateControlRenderer, DateControlRendererTester } from './controls/date.renderer';
+import { ToggleControlRenderer, ToggleControlRendererTester } from './controls/toggle.renderer';
+import { AutocompleteControlRenderer, enumControlTester } from './controls/autocomplete.renderer';
+import { ObjectControlRenderer, ObjectControlRendererTester } from './other/object.renderer';
+import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
+import { HorizontalLayoutRenderer, horizontalLayoutTester } from './layouts/horizontal-layout.renderer';
+import { CategorizationTabLayoutRenderer, categorizationTester } from './layouts/categorization-layout.renderer';
 import { LabelRenderer, LabelRendererTester } from './other/label.renderer';
-import {
-  masterDetailTester,
-  MasterListComponent
-} from './other/master-detail/master';
-import {
-  GroupLayoutRenderer,
-  groupLayoutTester
-} from './layouts/group-layout.renderer';
+import { masterDetailTester, MasterListComponent } from './other/master-detail/master';
+import { GroupLayoutRenderer, groupLayoutTester } from './layouts/group-layout.renderer';
 import { TableRenderer, TableRendererTester } from './other/table.renderer';
-import {
-  ArrayLayoutRenderer,
-  ArrayLayoutRendererTester
-} from './layouts/array-layout.renderer';
+import { ArrayLayoutRenderer, ArrayLayoutRendererTester } from './layouts/array-layout.renderer';
 
 export * from './controls';
 export * from './layouts';

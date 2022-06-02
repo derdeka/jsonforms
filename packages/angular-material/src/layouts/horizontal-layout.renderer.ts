@@ -23,24 +23,14 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import {
-  HorizontalLayout,
-  RankedTester,
-  rankWith,
-  uiTypeIs
-} from '@jsonforms/core';
+import { HorizontalLayout, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 
 @Component({
   selector: 'HorizontalLayoutRenderer',
   template: `
-    <div
-      fxLayout="row wrap"
-      fxLayoutGap="16px"
-      [fxHide]="hidden"
-      fxLayoutAlign="center start"
-    >
+    <div fxLayout="row wrap" fxLayoutGap="16px" [fxHide]="hidden" fxLayoutAlign="center start">
       <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
         <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
       </div>
@@ -49,11 +39,13 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HorizontalLayoutRenderer extends LayoutRenderer<HorizontalLayout> {
-  constructor(jsonFormsService: JsonFormsAngularService, changeDetectionRef: ChangeDetectorRef) {
+
+  constructor(
+    jsonFormsService: JsonFormsAngularService,
+    changeDetectionRef: ChangeDetectorRef,
+  ) {
     super(jsonFormsService, changeDetectionRef);
   }
 }
-export const horizontalLayoutTester: RankedTester = rankWith(
-  1,
-  uiTypeIs('HorizontalLayout')
-);
+
+export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));

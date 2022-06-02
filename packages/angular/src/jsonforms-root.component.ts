@@ -22,12 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-    Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Actions, JsonFormsI18nState, JsonFormsRendererRegistryEntry, JsonSchema, UISchemaElement, UISchemaTester, ValidationMode } from '@jsonforms/core';
 import Ajv, { ErrorObject } from 'ajv';
 import { JsonFormsAngularService, USE_STATE_VALUE } from './jsonforms.service';
+
 @Component({
     selector: 'jsonforms',
     template: '<jsonforms-outlet></jsonforms-outlet>',
@@ -49,14 +48,15 @@ export class JsonForms implements OnChanges, OnInit {
     @Input() additionalErrors: ErrorObject[];
     @Output() errors = new EventEmitter<ErrorObject[]>();
 
-    private previousData:any;
-    private previousErrors:ErrorObject[];
+    private previousData: any;
+    private previousErrors: ErrorObject[];
 
     private initialized = false;
     oldI18N: JsonFormsI18nState;
 
-    constructor(private jsonformsService: JsonFormsAngularService) {
-    }
+    constructor(
+        private jsonformsService: JsonFormsAngularService
+    ) {}
 
     ngOnInit(): void {
         this.jsonformsService.init({
@@ -93,22 +93,12 @@ export class JsonForms implements OnChanges, OnInit {
     ngDoCheck(): void {
         // we can't use ngOnChanges as then nested i18n changes will not be detected
         // the update will result in a no-op when the parameters did not change
-        if (
-          this.oldI18N?.locale !== this.i18n?.locale ||
-          this.oldI18N?.translate !== this.i18n?.translate ||
-          this.oldI18N?.translateError !== this.i18n?.translateError
-        ) {
+        if (this.oldI18N?.locale !== this.i18n?.locale || this.oldI18N?.translate !== this.i18n?.translate || this.oldI18N?.translateError !== this.i18n?.translateError) {
           this.jsonformsService.updateI18n(
             Actions.updateI18n(
-              this.oldI18N?.locale === this.i18n?.locale
-                ? this.jsonformsService.getState().jsonforms.i18n.locale
-                : this.i18n?.locale,
-              this.oldI18N?.translate === this.i18n?.translate
-                ? this.jsonformsService.getState().jsonforms.i18n.translate
-                : this.i18n?.translate,
-              this.oldI18N?.translateError === this.i18n?.translateError
-                ? this.jsonformsService.getState().jsonforms.i18n.translateError
-                : this.i18n?.translateError
+              this.oldI18N?.locale === this.i18n?.locale ? this.jsonformsService.getState().jsonforms.i18n.locale : this.i18n?.locale,
+              this.oldI18N?.translate === this.i18n?.translate ? this.jsonformsService.getState().jsonforms.i18n.translate : this.i18n?.translate,
+              this.oldI18N?.translateError === this.i18n?.translateError ? this.jsonformsService.getState().jsonforms.i18n.translateError : this.i18n?.translateError
             )
           );
           this.oldI18N = this.i18n;

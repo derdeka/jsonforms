@@ -76,9 +76,7 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
  * @param {string} schemaPath the schema path to be converted
  * @returns {string} the path without schema-specific keywords
  */
-export const toDataPath = (schemaPath: string): string => {
-  return toDataPathSegments(schemaPath).join('.');
-    };
+export const toDataPath = (schemaPath: string): string => toDataPathSegments(schemaPath).join('.');
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
   const segments = toDataPathSegments(scopableUi.scope);
@@ -96,6 +94,7 @@ export const composeWithUi = (scopableUi: Scopable, path: string): string => {
  * JSON Pointer has special meaning for "/" and "~", therefore these must be encoded
  */
 export const encode = (segment: string) => segment?.replace(/~/g, '~0').replace(/\//g, '~1');
+
 /**
  * Decodes a given JSON Pointer segment to its "normal" representation
  */

@@ -40,8 +40,13 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
-  constructor(jsonFormsService: JsonFormsAngularService, changeDetectionRef: ChangeDetectorRef) {
+
+  constructor(
+    jsonFormsService: JsonFormsAngularService,
+    changeDetectionRef: ChangeDetectorRef,
+  ) {
     super(jsonFormsService, changeDetectionRef);
   }
 }
+
 export const groupLayoutTester: RankedTester = rankWith(1, uiTypeIs('Group'));

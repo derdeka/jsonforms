@@ -35,12 +35,9 @@ export interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }
 
-const isObjectSchema = (schema: JsonSchema): boolean => {
-  return schema.properties !== undefined;
-};
-const isArraySchema = (schema: JsonSchema): boolean => {
-  return schema.type === 'array' && schema.items !== undefined;
-};
+const isObjectSchema = (schema: JsonSchema): boolean => schema.properties !== undefined;
+
+const isArraySchema = (schema: JsonSchema): boolean => schema.type === 'array' && schema.items !== undefined;
 
 export const resolveData = (instance: any, dataPath: string): any => {
   if (isEmpty(dataPath)) {
@@ -67,15 +64,9 @@ export const resolveData = (instance: any, dataPath: string): any => {
  *               inside the function)
  * @param resolveTuples Whether arrays of tuples should be considered; default: false
  */
-export const findAllRefs = (
-  schema: JsonSchema,
-  result: ReferenceSchemaMap = {},
-  resolveTuples = false
-): ReferenceSchemaMap => {
+export const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}, resolveTuples = false): ReferenceSchemaMap => {
   if (isObjectSchema(schema)) {
-    Object.keys(schema.properties).forEach(key =>
-      findAllRefs(schema.properties[key], result)
-    );
+    Object.keys(schema.properties).forEach(key => findAllRefs(schema.properties[key], result));
   }
   if (isArraySchema(schema)) {
     if (Array.isArray(schema.items)) {
@@ -98,8 +89,7 @@ export const findAllRefs = (
   return result;
 };
 
-const invalidSegment = (pathSegment: string) =>
-  pathSegment === '#' || pathSegment === undefined || pathSegment === '';
+const invalidSegment = (pathSegment: string) => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
 
 /**
  * Resolve the given schema path in order to obtain a subschema.
@@ -108,20 +98,12 @@ const invalidSegment = (pathSegment: string) =>
  * @param {JsonSchema} rootSchema the actual root schema
  * @returns {JsonSchema} the resolved sub-schema
  */
-export const resolveSchema = (
-  schema: JsonSchema,
-  schemaPath: string,
-  rootSchema: JsonSchema
-): JsonSchema => {
+export const resolveSchema = (schema: JsonSchema, schemaPath: string, rootSchema: JsonSchema): JsonSchema => {
   const segments = schemaPath?.split('/').map(decode);
   return resolveSchemaWithSegments(schema, segments, rootSchema);
 };
 
-const resolveSchemaWithSegments = (
-  schema: JsonSchema,
-  pathSegments: string[],
-  rootSchema: JsonSchema
-): JsonSchema => {
+const resolveSchemaWithSegments = (schema: JsonSchema, pathSegments: string[], rootSchema: JsonSchema): JsonSchema => {
   if (isEmpty(schema)) {
     return undefined;
   }
@@ -162,11 +144,7 @@ const resolveSchemaWithSegments = (
     );
 
     for (const subSchema of subSchemas) {
-      alternativeResolveResult = resolveSchemaWithSegments(
-        subSchema,
-        [segment, ...remainingSegments],
-        rootSchema
-      );
+      alternativeResolveResult = resolveSchemaWithSegments(subSchema, [segment, ...remainingSegments], rootSchema);
       if (alternativeResolveResult) {
         break;
       }

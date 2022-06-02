@@ -22,33 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  Actions,
-  computeLabel,
-  ControlElement,
-  JsonFormsState,
-  JsonSchema,
-  OwnPropsOfControl,
-  StatePropsOfControl
-} from '@jsonforms/core';
+import { Actions, computeLabel, ControlElement, JsonFormsState, JsonSchema, OwnPropsOfControl, StatePropsOfControl } from '@jsonforms/core';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  ValidationErrors,
-  ValidatorFn
-} from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
-
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { JsonFormsAngularService } from './jsonforms.service';
 import merge from 'lodash/merge';
+
 @Component({
   template: ''
 })
-export abstract class JsonFormsAbstractControl<
-  Props extends StatePropsOfControl
-> extends JsonFormsBaseRenderer<ControlElement> implements OnInit, OnDestroy {
+export abstract class JsonFormsAbstractControl<Props extends StatePropsOfControl> extends JsonFormsBaseRenderer<ControlElement> implements OnInit, OnDestroy {
+
   @Input() id: string;
   @Input() disabled: boolean;
   @Input() visible: boolean;
@@ -68,14 +54,8 @@ export abstract class JsonFormsAbstractControl<
   constructor(protected jsonFormsService: JsonFormsAngularService) {
     super();
     this.form = new FormControl(
-      {
-        value: '',
-        disabled: true
-      },
-      {
-        updateOn: 'change',
-        validators: this.validator.bind(this)
-      }
+      { value: '', disabled: true },
+      { updateOn: 'change', validators: this.validator.bind(this) },
     );
   }
 
@@ -98,23 +78,8 @@ export abstract class JsonFormsAbstractControl<
     this.jsonFormsService.$state.subscribe({
       next: (state: JsonFormsState) => {
         const props = this.mapToProps(state);
-        const {
-          data,
-          enabled,
-          errors,
-          label,
-          required,
-          schema,
-          rootSchema,
-          visible,
-          path,
-          config
-        } = props;
-        this.label = computeLabel(
-          label,
-          required,
-          config ? config.hideRequiredAsterisk : false
-        );
+        const { data, enabled, errors, label, required, schema, rootSchema, visible, path, config } = props;
+        this.label = computeLabel(label, required, config?.hideRequiredAsterisk || false);
         this.data = data;
         this.error = errors;
         this.enabled = enabled;
@@ -122,8 +87,7 @@ export abstract class JsonFormsAbstractControl<
         this.hidden = !visible;
         this.scopedSchema = schema;
         this.rootSchema = rootSchema;
-        this.description =
-          this.scopedSchema !== undefined ? this.scopedSchema.description : '';
+        this.description = this.scopedSchema !== undefined ? this.scopedSchema.description : '';
         this.id = props.id;
         this.form.setValue(data);
         this.propsPath = path;
@@ -171,8 +135,7 @@ export abstract class JsonFormsAbstractControl<
   protected abstract mapToProps(state: JsonFormsState): Props;
 
   protected triggerValidation() {
-    // these cause the correct update of the error underline, seems to be
-    // related to ionic-team/ionic#11640
+    // these cause the correct update of the error underline, seems to be related to ionic-team/ionic#11640
     this.form.markAsTouched();
     this.form.updateValueAndValidity();
   }

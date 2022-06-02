@@ -31,13 +31,7 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
   template: `
     <mat-form-field fxFlex [fxHide]="hidden">
       <mat-label>{{ label }}</mat-label>
-      <input
-        matInput
-        [type]="getType()"
-        (input)="onChange($event)"
-        [id]="id"
-        [formControl]="form"
-      />
+      <input matInput [type]="getType()" (input)="onChange($event)" [id]="id" [formControl]="form" />
       <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
@@ -45,10 +39,13 @@ import { isStringControl, RankedTester, rankWith } from '@jsonforms/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextControlRenderer extends JsonFormsControl {
+
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
   }
+
   getEventValue = (event: any) => event.target.value;
+
   getType = (): string => {
     if (this.uischema.options && this.uischema.options.format) {
       return this.uischema.options.format;
@@ -66,7 +63,4 @@ export class TextControlRenderer extends JsonFormsControl {
     return 'text';
   };
 }
-export const TextControlRendererTester: RankedTester = rankWith(
-  1,
-  isStringControl
-);
+export const TextControlRendererTester: RankedTester = rankWith(1, isStringControl);

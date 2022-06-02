@@ -244,8 +244,6 @@ export interface Categorization extends UISchemaElement {
   elements: (Category | Categorization)[];
 }
 
-export const isGroup = (layout: Layout): layout is GroupLayout =>
-  layout.type === 'Group';
+export const isGroup = (layout: Layout): layout is GroupLayout => layout.type === 'Group';
 
-export const isLayout = (uischema: UISchemaElement): uischema is Layout =>
-  (uischema as Layout).elements !== undefined;
+export const isLayout = (uischema: UISchemaElement): uischema is Layout => (uischema as Layout).elements !== undefined;

@@ -24,26 +24,13 @@
 */
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import {
-  and,
-  isBooleanControl,
-  optionIs,
-  RankedTester,
-  rankWith
-} from '@jsonforms/core';
+import { and, isBooleanControl, optionIs, RankedTester, rankWith } from '@jsonforms/core';
 
 @Component({
   selector: 'ToggleControlRenderer',
   template: `
     <div [fxHide]="hidden">
-      <mat-slide-toggle
-        (change)="onChange($event)"
-        [checked]="isChecked()"
-        [disabled]="!isEnabled()"
-        [id]="id"
-      >
-        {{ label }}
-      </mat-slide-toggle>
+      <mat-slide-toggle (change)="onChange($event)" [checked]="isChecked()" [disabled]="!isEnabled()" [id]="id">{{ label }}</mat-slide-toggle>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
@@ -51,17 +38,21 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToggleControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
+
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {
     super(jsonformsService);
   }
+
   isChecked = () => this.data || false;
+
   getEventValue = (event: any) => event.checked;
+
   mapAdditionalProps() {
     this.changeDetectorRef.markForCheck();
   }
 }
 
-export const ToggleControlRendererTester: RankedTester = rankWith(
-  3,
-  and(isBooleanControl, optionIs('toggle', true))
-);
+export const ToggleControlRendererTester: RankedTester = rankWith(3, and(isBooleanControl, optionIs('toggle', true)));

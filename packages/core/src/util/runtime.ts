@@ -24,16 +24,7 @@
 */
 
 import has from 'lodash/has';
-import {
-  AndCondition,
-  Condition,
-  LeafCondition,
-  OrCondition,
-  RuleEffect,
-  SchemaBasedCondition,
-  Scopable,
-  UISchemaElement
-} from '../models';
+import { AndCondition, Condition, LeafCondition, OrCondition, RuleEffect, SchemaBasedCondition, Scopable, UISchemaElement } from '../models';
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
 import Ajv from 'ajv';
@@ -41,39 +32,21 @@ import { getAjv } from '../reducers';
 import { JsonFormsState } from '../store';
 import { JsonSchema } from '../models/jsonSchema';
 
-const isOrCondition = (condition: Condition): condition is OrCondition =>
-  condition.type === 'OR';
+const isOrCondition = (condition: Condition): condition is OrCondition => condition.type === 'OR';
 
-const isAndCondition = (condition: Condition): condition is AndCondition =>
-  condition.type === 'AND';
+const isAndCondition = (condition: Condition): condition is AndCondition => condition.type === 'AND';
 
-const isLeafCondition = (condition: Condition): condition is LeafCondition =>
-  condition.type === 'LEAF';
+const isLeafCondition = (condition: Condition): condition is LeafCondition => condition.type === 'LEAF';
 
-const isSchemaCondition = (
-  condition: Condition
-): condition is SchemaBasedCondition => has(condition, 'schema');
+const isSchemaCondition = (condition: Condition): condition is SchemaBasedCondition => has(condition, 'schema');
 
-const getConditionScope = (condition: Scopable, path: string): string => {
-  return composeWithUi(condition, path);
-};
+const getConditionScope = (condition: Scopable, path: string): string => composeWithUi(condition, path);
 
-const evaluateCondition = (
-  data: any,
-  condition: Condition,
-  path: string,
-  ajv: Ajv
-): boolean => {
+const evaluateCondition = (data: any, condition: Condition, path: string, ajv: Ajv): boolean => {
   if (isAndCondition(condition)) {
-    return condition.conditions.reduce(
-      (acc, cur) => acc && evaluateCondition(data, cur, path, ajv),
-      true
-    );
+    return condition.conditions.reduce((acc, cur) => acc && evaluateCondition(data, cur, path, ajv), true);
   } else if (isOrCondition(condition)) {
-    return condition.conditions.reduce(
-      (acc, cur) => acc || evaluateCondition(data, cur, path, ajv),
-      false
-    );
+    return condition.conditions.reduce((acc, cur) => acc || evaluateCondition(data, cur, path, ajv), false);
   } else if (isLeafCondition(condition)) {
     const value = resolveData(data, getConditionScope(condition, path));
     return value === condition.expectedValue;
@@ -86,22 +59,12 @@ const evaluateCondition = (
   }
 };
 
-const isRuleFulfilled = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string,
-  ajv: Ajv
-): boolean => {
+const isRuleFulfilled = (uischema: UISchemaElement, data: any, path: string, ajv: Ajv): boolean => {
   const condition = uischema.rule.condition;
   return evaluateCondition(data, condition, path, ajv);
 };
 
-export const evalVisibility = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string = undefined,
-  ajv: Ajv
-): boolean => {
+export const evalVisibility = (uischema: UISchemaElement, data: any, path: string = undefined, ajv: Ajv): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
 
   switch (uischema.rule.effect) {
@@ -115,12 +78,7 @@ export const evalVisibility = (
   }
 };
 
-export const evalEnablement = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string = undefined,
-  ajv: Ajv
-): boolean => {
+export const evalEnablement = (uischema: UISchemaElement, data: any, path: string = undefined, ajv: Ajv): boolean => {
   const fulfilled = isRuleFulfilled(uischema, data, path, ajv);
 
   switch (uischema.rule.effect) {
@@ -134,34 +92,11 @@ export const evalEnablement = (
   }
 };
 
-export const hasShowRule = (uischema: UISchemaElement): boolean => {
-  if (
-    uischema.rule &&
-    (uischema.rule.effect === RuleEffect.SHOW ||
-      uischema.rule.effect === RuleEffect.HIDE)
-  ) {
-    return true;
-  }
-  return false;
-};
+export const hasShowRule = (uischema: UISchemaElement): boolean => uischema.rule && (uischema.rule.effect === RuleEffect.SHOW || uischema.rule.effect === RuleEffect.HIDE);
 
-export const hasEnableRule = (uischema: UISchemaElement): boolean => {
-  if (
-    uischema.rule &&
-    (uischema.rule.effect === RuleEffect.ENABLE ||
-      uischema.rule.effect === RuleEffect.DISABLE)
-  ) {
-    return true;
-  }
-  return false;
-};
+export const hasEnableRule = (uischema: UISchemaElement): boolean => uischema.rule && (uischema.rule.effect === RuleEffect.ENABLE || uischema.rule.effect === RuleEffect.DISABLE);
 
-export const isVisible = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string = undefined,
-  ajv: Ajv
-): boolean => {
+export const isVisible = (uischema: UISchemaElement, data: any, path: string = undefined, ajv: Ajv): boolean => {
   if (uischema.rule) {
     return evalVisibility(uischema, data, path, ajv);
   }
@@ -169,12 +104,7 @@ export const isVisible = (
   return true;
 };
 
-export const isEnabled = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string = undefined,
-  ajv: Ajv
-): boolean => {
+export const isEnabled = (uischema: UISchemaElement, data: any, path: string = undefined, ajv: Ajv): boolean => {
   if (uischema.rule) {
     return evalEnablement(uischema, data, path, ajv);
   }
@@ -187,14 +117,7 @@ export const isEnabled = (
  * Checks the global readonly flag, uischema rule, uischema options (including the config),
  * the schema and the enablement indicator of the parent.
  */
-export const isInherentlyEnabled = (
-  state: JsonFormsState,
-  ownProps: any,
-  uischema: UISchemaElement,
-  schema: JsonSchema & { readOnly?: boolean } | undefined,
-  rootData: any,
-  config: any
-) => {
+export const isInherentlyEnabled = (state: JsonFormsState, ownProps: any, uischema: UISchemaElement, schema: JsonSchema & { readOnly?: boolean } | undefined, rootData: any, config: any) => {
   if (state?.jsonforms?.readonly) {
     return false;
   }

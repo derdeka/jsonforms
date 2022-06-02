@@ -25,50 +25,30 @@
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {
-  JsonFormsAngularService,
-  JsonFormsControlWithDetail
-} from '@jsonforms/angular';
-import {
-  ControlWithDetailProps,
-  findUISchema,
-  GroupLayout,
-  isObjectControl,
-  RankedTester,
-  rankWith,
-  setReadonly,
-  UISchemaElement
-} from '@jsonforms/core';
+import { JsonFormsAngularService, JsonFormsControlWithDetail } from '@jsonforms/angular';
+import { ControlWithDetailProps, findUISchema, GroupLayout, isObjectControl, RankedTester, rankWith, setReadonly, UISchemaElement } from '@jsonforms/core';
 
 @Component({
   selector: 'ObjectRenderer',
   template: `
     <mat-card>
-      <jsonforms-outlet
-        [uischema]="detailUiSchema"
-        [schema]="scopedSchema"
-        [path]="propsPath"
-      >
-      </jsonforms-outlet>
+      <jsonforms-outlet [uischema]="detailUiSchema" [schema]="scopedSchema" [path]="propsPath"></jsonforms-outlet>
     </mat-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
+
   detailUiSchema: UISchemaElement;
-  constructor(jsonformsService: JsonFormsAngularService) {
+
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+  ) {
     super(jsonformsService);
   }
+
   mapAdditionalProps(props: ControlWithDetailProps) {
-    this.detailUiSchema = findUISchema(
-      props.uischemas,
-      props.schema,
-      props.uischema.scope,
-      props.path,
-      'Group',
-      props.uischema,
-      props.rootSchema
-    );
+    this.detailUiSchema = findUISchema(props.uischemas, props.schema, props.uischema.scope, props.path, 'Group', props.uischema, props.rootSchema);
     if (isEmpty(props.path)) {
       this.detailUiSchema.type = 'VerticalLayout';
     } else {
@@ -79,7 +59,5 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
     }
   }
 }
-export const ObjectControlRendererTester: RankedTester = rankWith(
-  2,
-  isObjectControl
-);
+
+export const ObjectControlRendererTester: RankedTester = rankWith(2, isObjectControl);

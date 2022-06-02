@@ -23,12 +23,7 @@
   THE SOFTWARE.
 */
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import {
-  getLocale,
-  isDateControl,
-  RankedTester,
-  rankWith
-} from '@jsonforms/core';
+import { getLocale, isDateControl, RankedTester, rankWith } from '@jsonforms/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
 
@@ -37,17 +32,8 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
   template: `
     <mat-form-field fxFlex [fxHide]="hidden">
       <mat-label>{{ label }}</mat-label>
-      <input
-        matInput
-        (dateChange)="onChange($event)"
-        [id]="id"
-        [formControl]="form"
-        [matDatepicker]="datepicker"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="datepicker"
-      ></mat-datepicker-toggle>
+      <input matInput (dateChange)="onChange($event)" [id]="id" [formControl]="form" [matDatepicker]="datepicker" />
+      <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
       <mat-datepicker #datepicker></mat-datepicker>
       <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
@@ -56,6 +42,7 @@ import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateControlRenderer extends JsonFormsControl {
+
   constructor(
     jsonformsService: JsonFormsAngularService,
     private dateAdapter: DateAdapter<NativeDateAdapter>
@@ -71,7 +58,4 @@ export class DateControlRenderer extends JsonFormsControl {
   getEventValue = (event: any) => event.value.toISOString().substr(0, 10);
 }
 
-export const DateControlRendererTester: RankedTester = rankWith(
-  2,
-  isDateControl
-);
+export const DateControlRendererTester: RankedTester = rankWith(2, isDateControl);

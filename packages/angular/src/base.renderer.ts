@@ -22,15 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {  Directive, Input } from '@angular/core';
-import {
-  JsonSchema,
-  OwnPropsOfRenderer,
-  UISchemaElement
-} from '@jsonforms/core';
+import { Directive, Input } from '@angular/core';
+import { JsonSchema, OwnPropsOfRenderer, UISchemaElement } from '@jsonforms/core';
 
 @Directive()
 export class JsonFormsBaseRenderer<T extends UISchemaElement> {
+
   @Input() uischema: T;
   @Input() schema: JsonSchema;
   @Input() path: string;

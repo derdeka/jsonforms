@@ -26,7 +26,6 @@
 import AJV, { ErrorObject } from 'ajv';
 import { JsonSchema, UISchemaElement } from '../models';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
-
 import { RankedTester } from '../testers';
 import { UISchemaTester, ValidationMode } from '../reducers';
 import { ErrorTranslator, Translator } from '../i18n';
@@ -35,12 +34,10 @@ export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const UPDATE_CORE: 'jsonforms/UPDATE_CORE' = `jsonforms/UPDATE_CORE`;
 export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
 export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
-export const UPDATE_ERRORS: 'jsonforms/UPDATE_ERRORS' =
-  'jsonforms/UPDATE_ERRORS';
+export const UPDATE_ERRORS: 'jsonforms/UPDATE_ERRORS' = 'jsonforms/UPDATE_ERRORS';
 export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
 export const ADD_RENDERER: 'jsonforms/ADD_RENDERER' = 'jsonforms/ADD_RENDERER';
-export const REMOVE_RENDERER: 'jsonforms/REMOVE_RENDERER' =
-  'jsonforms/REMOVE_RENDERER';
+export const REMOVE_RENDERER: 'jsonforms/REMOVE_RENDERER' = 'jsonforms/REMOVE_RENDERER';
 export const ADD_CELL: 'jsonforms/ADD_CELL' = 'jsonforms/ADD_CELL';
 export const REMOVE_CELL: 'jsonforms/REMOVE_CELL' = 'jsonforms/REMOVE_CELL';
 export const SET_CONFIG: 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
@@ -48,14 +45,11 @@ export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
 export const SET_SCHEMA: 'jsonforms/SET_SCHEMA' = `jsonforms/SET_SCHEMA`;
 export const SET_UISCHEMA: 'jsonforms/SET_UISCHEMA' = `jsonforms/SET_UISCHEMA`;
-export const SET_VALIDATION_MODE: 'jsonforms/SET_VALIDATION_MODE' =
-  'jsonforms/SET_VALIDATION_MODE';
+export const SET_VALIDATION_MODE: 'jsonforms/SET_VALIDATION_MODE' = 'jsonforms/SET_VALIDATION_MODE';
 
 export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
-export const SET_TRANSLATOR: 'jsonforms/SET_TRANSLATOR' =
-  'jsonforms/SET_TRANSLATOR';
-export const UPDATE_I18N: 'jsonforms/UPDATE_I18N' =
-  'jsonforms/UPDATE_I18N';
+export const SET_TRANSLATOR: 'jsonforms/SET_TRANSLATOR' = 'jsonforms/SET_TRANSLATOR';
+export const UPDATE_I18N: 'jsonforms/UPDATE_I18N' = 'jsonforms/UPDATE_I18N';
 
 export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
 export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
@@ -108,26 +102,15 @@ export interface SetValidationModeAction {
   validationMode: ValidationMode
 }
 
-export const init = (
-  data: any,
-  schema: JsonSchema = generateJsonSchema(data),
-  uischema?: UISchemaElement,
-  options?: InitActionOptions | AJV
-) => ({
+export const init = (data: any, schema: JsonSchema = generateJsonSchema(data), uischema?: UISchemaElement, options?: InitActionOptions | AJV) => ({
   type: INIT,
   data,
   schema,
-  uischema:
-    typeof uischema === 'object' ? uischema : generateDefaultUISchema(schema),
+  uischema:  typeof uischema === 'object' ? uischema : generateDefaultUISchema(schema),
   options
 });
 
-export const updateCore = (
-  data: any,
-  schema: JsonSchema,
-  uischema?: UISchemaElement,
-  options?: AJV | InitActionOptions
-): UpdateCoreAction => ({
+export const updateCore = (data: any, schema: JsonSchema, uischema?: UISchemaElement, options?: AJV | InitActionOptions): UpdateCoreAction => ({
   type: UPDATE_CORE,
   data,
   schema,
@@ -167,10 +150,7 @@ export const setAjv = (ajv: AJV) => ({
   ajv
 });
 
-export const update = (
-  path: string,
-  updater: (existingData: any) => any
-): UpdateAction => ({
+export const update = (path: string, updater: (existingData: any) => any): UpdateAction => ({
   type: UPDATE_DATA,
   path,
   updater
@@ -252,30 +232,21 @@ export interface AddUISchemaAction {
   uischema: UISchemaElement;
 }
 
-export const registerUISchema = (
-  tester: UISchemaTester,
-  uischema: UISchemaElement
-): AddUISchemaAction => {
-  return {
-    type: ADD_UI_SCHEMA,
-    tester,
-    uischema
-  };
-};
+export const registerUISchema = (tester: UISchemaTester, uischema: UISchemaElement): AddUISchemaAction => ({
+  type: ADD_UI_SCHEMA,
+  tester,
+  uischema
+});
 
 export interface RemoveUISchemaAction {
   type: 'jsonforms/REMOVE_UI_SCHEMA';
   tester: UISchemaTester;
 }
 
-export const unregisterUISchema = (
-  tester: UISchemaTester
-): RemoveUISchemaAction => {
-  return {
-    type: REMOVE_UI_SCHEMA,
-    tester
-  };
-};
+export const unregisterUISchema = (tester: UISchemaTester): RemoveUISchemaAction => ({
+  type: REMOVE_UI_SCHEMA,
+  tester
+});
 
 export type I18nActions =
   | SetLocaleAction
@@ -308,10 +279,7 @@ export interface SetTranslatorAction {
   errorTranslator?: ErrorTranslator; 
 }
 
-export const setTranslator = (
-  translator?: Translator,
-  errorTranslator?: ErrorTranslator
-): SetTranslatorAction => ({
+export const setTranslator = (translator?: Translator, errorTranslator?: ErrorTranslator): SetTranslatorAction => ({
   type: SET_TRANSLATOR,
   translator,
   errorTranslator
@@ -324,11 +292,7 @@ export interface UpdateI18nAction {
   errorTranslator: ErrorTranslator | undefined; 
 }
 
-export const updateI18n = (
-  locale: string | undefined,
-  translator: Translator | undefined,
-  errorTranslator: ErrorTranslator | undefined
-): UpdateI18nAction => ({
+export const updateI18n = (locale: string | undefined, translator: Translator | undefined, errorTranslator: ErrorTranslator | undefined): UpdateI18nAction => ({
   type: UPDATE_I18N,
   locale,
   translator,

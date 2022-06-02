@@ -30,20 +30,8 @@ import { isRangeControl, RankedTester, rankWith } from '@jsonforms/core';
   selector: 'RangeControlRenderer',
   template: `
     <div fxFlex fxLayout="column" [fxHide]="hidden">
-      <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{
-        label
-      }}</label>
-      <mat-slider
-        [value]="data || scopedSchema.default"
-        (change)="onChange($event)"
-        [disabled]="!isEnabled()"
-        [max]="max"
-        [min]="min"
-        [step]="multipleOf"
-        [thumbLabel]="true"
-        tickInterval="auto"
-        [id]="id"
-      ></mat-slider>
+      <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{label}}</label>
+      <mat-slider [value]="data || scopedSchema.default" (change)="onChange($event)" [disabled]="!isEnabled()" [max]="max" [min]="min" [step]="multipleOf" [thumbLabel]="true" tickInterval="auto" [id]="id"></mat-slider>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
@@ -58,7 +46,9 @@ export class RangeControlRenderer extends JsonFormsControl {
   constructor(jsonformsService: JsonFormsAngularService, private changeDetectorRef: ChangeDetectorRef) {
     super(jsonformsService);
   }
+
   getEventValue = (event: any) => Number(event.value);
+
   mapAdditionalProps() {
     if (this.scopedSchema) {
       this.min = this.scopedSchema.minimum;
@@ -68,7 +58,5 @@ export class RangeControlRenderer extends JsonFormsControl {
     this.changeDetectorRef.markForCheck();
   }
 }
-export const RangeControlRendererTester: RankedTester = rankWith(
-  4,
-  isRangeControl
-);
+
+export const RangeControlRendererTester: RankedTester = rankWith(4, isRangeControl);

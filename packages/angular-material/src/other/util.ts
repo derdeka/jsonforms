@@ -30,16 +30,6 @@ export const controlWithoutLabel = (scope: string): ControlElement => ({
   label: false
 });
 
-export const mapStateToVisible = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfRenderer
-) => {
-  const visible =
-    ownProps.visible !== undefined
-      ? ownProps.visible
-      : isVisible(ownProps.uischema, getData(state), undefined, getAjv(state));
-
-  return {
-    visible
-  };
-};
+export const mapStateToVisible = (state: JsonFormsState, ownProps: OwnPropsOfRenderer) => ({
+  visible: ownProps.visible !== undefined ? ownProps.visible : isVisible(ownProps.uischema, getData(state), undefined, getAjv(state))
+});

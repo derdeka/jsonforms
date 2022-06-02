@@ -29,12 +29,7 @@ import { ControlElement, JsonSchema, UISchemaElement } from '../';
 
 export const Generate: {
   jsonSchema(instance: Object, options?: any): JsonSchema;
-  uiSchema(
-    jsonSchema: JsonSchema,
-    layoutType?: string,
-    prefix?: string,
-    rootSchema?: JsonSchema
-  ): UISchemaElement;
+  uiSchema(jsonSchema: JsonSchema, layoutType?: string, prefix?: string, rootSchema?: JsonSchema): UISchemaElement;
   controlElement(ref: string): ControlElement;
 } = {
   jsonSchema: generateJsonSchema,

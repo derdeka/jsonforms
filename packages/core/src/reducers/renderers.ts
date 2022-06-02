@@ -24,12 +24,7 @@
 */
 
 import { RankedTester } from '../testers';
-import {
-  ADD_RENDERER,
-  AddRendererAction,
-  REMOVE_RENDERER,
-  RemoveRendererAction
-} from '../actions';
+import { ADD_RENDERER, AddRendererAction, REMOVE_RENDERER, RemoveRendererAction } from '../actions';
 import { Reducer } from '../util';
 
 export interface JsonFormsRendererRegistryEntry {
@@ -39,10 +34,7 @@ export interface JsonFormsRendererRegistryEntry {
 
 type ValidRendererReducerActions = AddRendererAction | RemoveRendererAction;
 
-export const rendererReducer: Reducer<JsonFormsRendererRegistryEntry[], ValidRendererReducerActions> = (
-  state = [],
-  action
-) => {
+export const rendererReducer: Reducer<JsonFormsRendererRegistryEntry[], ValidRendererReducerActions> = (state = [], action) => {
   switch (action.type) {
     case ADD_RENDERER:
       return state.concat([

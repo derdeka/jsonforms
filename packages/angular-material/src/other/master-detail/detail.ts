@@ -33,6 +33,7 @@ import { Component, Input } from '@angular/core';
   `
 })
 export class JsonFormsDetailComponent {
+
   _item: any;
   _schema: any;
   initialized = false;

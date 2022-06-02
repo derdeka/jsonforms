@@ -30,20 +30,7 @@ import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
 import isFunction from 'lodash/isFunction';
 import Ajv, { ErrorObject, ValidateFunction } from 'ajv';
-import {
-  CoreActions,
-  INIT,
-  InitAction,
-  InitActionOptions,
-  SET_AJV,
-  SET_SCHEMA,
-  SET_UISCHEMA,
-  SET_VALIDATION_MODE,
-  UPDATE_DATA,
-  UPDATE_ERRORS,
-  UPDATE_CORE,
-  UpdateCoreAction
-} from '../actions';
+import { CoreActions, INIT, InitAction, InitActionOptions, SET_AJV, SET_SCHEMA, SET_UISCHEMA, SET_VALIDATION_MODE, UPDATE_DATA, UPDATE_ERRORS, UPDATE_CORE, UpdateCoreAction } from '../actions';
 import { createAjv, Reducer } from '../util';
 import { JsonSchema, UISchemaElement } from '../models';
 
@@ -94,9 +81,7 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction | UpdateCoreAc
     if (hasAjvOption(action.options)) {
       // options object with ajv
       return action.options.ajv;
-    } else if (
-      action.options !== undefined
-    ) {
+    } else if (action.options !== undefined) {
       // it is not an option object => should be ajv itself => check for compile function
       if (isFunction(action.options.compile)) {
         return action.options;
@@ -104,9 +89,7 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction | UpdateCoreAc
     }
   }
   if (state.ajv) {
-    return action?.schema
-      ? reuseAjvForSchema(state.ajv, action.schema)
-      : state.ajv;
+      return action?.schema ? reuseAjvForSchema(state.ajv, action.schema) : state.ajv;
   }
   return createAjv();
 };
@@ -118,10 +101,7 @@ const hasAjvOption = (option: any): option is InitActionOptions => {
   return false;
 };
 
-const getValidationMode = (
-  state: JsonFormsCore,
-  action?: InitAction | UpdateCoreAction
-): ValidationMode => {
+const getValidationMode = (state: JsonFormsCore, action?: InitAction | UpdateCoreAction): ValidationMode => {
   if (action && hasValidationModeOption(action.options)) {
     return action.options.validationMode;
   }
@@ -142,10 +122,7 @@ const hasAdditionalErrorsOption = (option: any): option is InitActionOptions => 
   return false;
 };
 
-const getAdditionalErrors = (
-  state: JsonFormsCore,
-  action?: InitAction | UpdateCoreAction
-): ErrorObject[] => {
+const getAdditionalErrors = (state: JsonFormsCore, action?: InitAction | UpdateCoreAction): ErrorObject[] => {
   if (action && hasAdditionalErrorsOption(action.options)) {
     return action.options.additionalErrors;
   }
@@ -153,10 +130,7 @@ const getAdditionalErrors = (
 };
 
 // tslint:disable-next-line: cyclomatic-complexity
-export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
-  state = initState,
-  action
-) => {
+export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (state = initState, action) => {
   switch (action.type) {
     case INIT: {
       const thisAjv = getOrCreateAjv(state, action);
@@ -183,16 +157,9 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
       const validationMode = getValidationMode(state, action);
       let validator = state.validator;
       let errors = state.errors;
-      if (
-        state.schema !== action.schema ||
-        state.validationMode !== validationMode ||
-        state.ajv !== thisAjv
-      ) {
+      if (state.schema !== action.schema || state.validationMode !== validationMode || state.ajv !== thisAjv) {
         // revalidate only if necessary
-        validator =
-          validationMode === 'NoValidation'
-            ? undefined
-            : thisAjv.compile(action.schema);
+        validator = validationMode === 'NoValidation' ? undefined : thisAjv.compile(action.schema);
         errors = validate(validator, action.data);
       } else if (state.data !== action.data) {
         errors = validate(validator, action.data);
@@ -207,7 +174,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
         state.errors !== errors ||
         state.validator !== validator ||
         state.validationMode !== validationMode ||
-        state.additionalErrors !== additionalErrors
+        state.additionalErrors !== additionalErrors;
       return stateChanged
         ? {
             ...state,
@@ -234,9 +201,7 @@ export const coreReducer: Reducer<JsonFormsCore, CoreActions> = (
     }
     case SET_SCHEMA: {
       const needsNewValidator = action.schema && state.ajv && state.validationMode !== 'NoValidation';
-      const v = needsNewValidator
-        ? reuseAjvForSchema(state.ajv, action.schema).compile(action.schema)
-        : state.validator;
+      const v = needsNewValidator ? reuseAjvForSchema(state.ajv, action.schema).compile(action.schema) : state.validator;
       const errors = validate(v, state.data);
       return {
         ...state,
@@ -356,22 +321,15 @@ export const getControlPath = (error: ErrorObject) => {
   return controlPath;
 }
 
-export const errorsAt = (
-  instancePath: string,
-  schema: JsonSchema,
-  matchPath: (path: string) => boolean
-) => (errors: ErrorObject[]): ErrorObject[] => {
+export const errorsAt = (instancePath: string, schema: JsonSchema, matchPath: (path: string) => boolean) => (errors: ErrorObject[]): ErrorObject[] => {
   // Get data paths of oneOf and anyOf errors to later determine whether an error occurred inside a subschema of oneOf or anyOf.
-  const combinatorPaths = filter(
-    errors,
-    error => error.keyword === 'oneOf' || error.keyword === 'anyOf'
-    ).map(error => getControlPath(error));
+  const combinatorPaths = filter(errors, error => error.keyword === 'oneOf' || error.keyword === 'anyOf').map(error => getControlPath(error));
     
-    return filter(errors, error => {
-      // Filter errors that match any keyword that we don't want to show in the UI
-      if (filteredErrorKeywords.indexOf(error.keyword) !== -1) {
-        return false;
-      }
+  return filter(errors, error => {
+    // Filter errors that match any keyword that we don't want to show in the UI
+    if (filteredErrorKeywords.indexOf(error.keyword) !== -1) {
+      return false;
+    }
     const controlPath = getControlPath(error);
     let result = matchPath(controlPath);
     // In anyOf and oneOf blocks with "primitive" (i.e. string, number etc.) or array subschemas,
@@ -394,9 +352,7 @@ export const errorsAt = (
 /**
  * @returns true if the schema describes an object.
  */
-const isObjectSchema = (schema?: JsonSchema): boolean => {
-  return schema?.type === 'object' || !!schema?.properties;
-}
+const isObjectSchema = (schema?: JsonSchema): boolean => schema?.type === 'object' || !!schema?.properties;
 
 /**
  * The error-type of an AJV error is defined by its `keyword` property.
@@ -411,17 +367,12 @@ const isObjectSchema = (schema?: JsonSchema): boolean => {
  */
 const filteredErrorKeywords = ['additionalProperties', 'allOf', 'anyOf', 'oneOf'];
 
-const getErrorsAt = (
-  instancePath: string,
-  schema: JsonSchema,
-  matchPath: (path: string) => boolean
-) => (state: JsonFormsCore): ErrorObject[] => {
+const getErrorsAt = (instancePath: string, schema: JsonSchema, matchPath: (path: string) => boolean) => (state: JsonFormsCore): ErrorObject[] => {
   const errors = state.errors ?? [];
   const additionalErrors = state.additionalErrors ?? [];
   return errorsAt(instancePath, schema, matchPath)(state.validationMode === 'ValidateAndHide' ? additionalErrors : [...errors, ...additionalErrors]);
 }
 
-export const errorAt = (instancePath: string, schema: JsonSchema) =>
-  getErrorsAt(instancePath, schema, path => path === instancePath);
-export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
-  getErrorsAt(instancePath, schema, path => path.startsWith(instancePath));
+export const errorAt = (instancePath: string, schema: JsonSchema) => getErrorsAt(instancePath, schema, path => path === instancePath);
+
+export const subErrorsAt = (instancePath: string, schema: JsonSchema) => getErrorsAt(instancePath, schema, path => path.startsWith(instancePath));

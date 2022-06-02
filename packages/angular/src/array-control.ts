@@ -22,17 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  JsonFormsState,
-  mapStateToArrayControlProps,
-  StatePropsOfArrayControl
-} from '@jsonforms/core';
+import { JsonFormsState, mapStateToArrayControlProps, StatePropsOfArrayControl } from '@jsonforms/core';
 import { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsAbstractControl } from './abstract-control';
 
-export class JsonFormsArrayControl
-  extends JsonFormsAbstractControl<StatePropsOfArrayControl>
-  implements OnInit, OnDestroy {
+export class JsonFormsArrayControl extends JsonFormsAbstractControl<StatePropsOfArrayControl> implements OnInit, OnDestroy {
+
   protected mapToProps(state: JsonFormsState): StatePropsOfArrayControl {
     const props = mapStateToArrayControlProps(state, this.getOwnProps());
     return { ...props };

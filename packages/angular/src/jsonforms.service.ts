@@ -23,35 +23,16 @@
   THE SOFTWARE.
 */
 import {
-    Actions,
-    configReducer,
-    CoreActions,
-    coreReducer,
-    generateDefaultUISchema,
-    generateJsonSchema,
-    i18nReducer,
-    JsonFormsRendererRegistryEntry,
-    JsonFormsState,
-    JsonFormsSubStates,
-    JsonSchema,
-    I18nActions,
-    RankedTester,
-    setConfig,
-    SetConfigAction,
-    UISchemaActions,
-    UISchemaElement,
-    uischemaRegistryReducer,
-    UISchemaTester,
-    ValidationMode,
-    updateI18n
+    Actions, configReducer, CoreActions, coreReducer, generateDefaultUISchema, generateJsonSchema, i18nReducer, JsonFormsRendererRegistryEntry, JsonFormsState, JsonFormsSubStates, JsonSchema,
+    I18nActions, RankedTester, setConfig, SetConfigAction, UISchemaElement, UISchemaTester, ValidationMode, updateI18n,
 } from '@jsonforms/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { JsonFormsBaseRenderer } from './base.renderer';
-
 import { cloneDeep } from 'lodash';
 import Ajv, { ErrorObject } from 'ajv';
 
 export const USE_STATE_VALUE = Symbol('Marker to use state value');
+
 export class JsonFormsAngularService {
 
     private _state: JsonFormsSubStates;
@@ -75,34 +56,16 @@ export class JsonFormsAngularService {
         return this.state.asObservable();
     }
 
-    /**
-     * @deprecated use {@link JsonFormsAngularService.addRenderer}
-     */
-    registerRenderer(renderer: JsonFormsBaseRenderer<UISchemaElement>, tester: RankedTester): void {
-        this.addRenderer(renderer, tester);
-    }
     addRenderer(renderer: JsonFormsBaseRenderer<UISchemaElement>, tester: RankedTester): void {
         this._state.renderers.push({ renderer, tester });
         this.updateSubject();
     }
 
-    /**
-     * @deprecated use {@link JsonFormsAngularService.setRenderer}
-     */
-    registerRenderers(renderers: JsonFormsRendererRegistryEntry[]): void {
-        this.setRenderers(renderers);
-    }
     setRenderers(renderers: JsonFormsRendererRegistryEntry[]): void {
         this._state.renderers = renderers;
         this.updateSubject();
     }
 
-    /**
-     * @deprecated use {@link JsonFormsAngularService.removeRenderer}
-     */
-    unregisterRenderer(tester: RankedTester): void {
-        this.removeRenderer(tester);
-    }
     removeRenderer(tester: RankedTester): void {
         const findIndex = this._state.renderers.findIndex(v => v.tester === tester);
         if (findIndex === -1) {
@@ -135,16 +98,6 @@ export class JsonFormsAngularService {
             this.updateSubject();
         }
         return coreAction;
-    }
-
-    /**
-     * @deprecated use {@link JsonFormsAngularService.setUiSchemas}
-     */
-    updateUiSchema<T extends UISchemaActions>(uischemaAction: T): T {
-        const uischemaState = uischemaRegistryReducer(this._state.uischemas, uischemaAction);
-        this._state.uischemas = uischemaState;
-        this.updateSubject();
-        return uischemaAction;
     }
 
     setUiSchemas(uischemas: { tester: UISchemaTester; uischema: UISchemaElement; }[]): void {

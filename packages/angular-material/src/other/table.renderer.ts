@@ -24,70 +24,49 @@
 */
 import startCase from 'lodash/startCase';
 import { Component } from '@angular/core';
-import {
-  JsonFormsAngularService,
-  JsonFormsArrayControl
-} from '@jsonforms/angular';
-import {
-  ArrayControlProps,
-  ControlElement,
-  deriveTypes,
-  encode,
-  isObjectArrayControl,
-  isPrimitiveArrayControl,
-  JsonSchema,
-  or,
-  OwnPropsOfRenderer,
-  Paths,
-  RankedTester,
-  rankWith,
-  setReadonly,
-  UISchemaElement
-} from '@jsonforms/core';
+import { JsonFormsAngularService, JsonFormsArrayControl } from '@jsonforms/angular';
+import { ArrayControlProps, ControlElement, deriveTypes, encode, isObjectArrayControl, isPrimitiveArrayControl, JsonSchema, or, OwnPropsOfRenderer, Paths, RankedTester, rankWith, setReadonly, UISchemaElement } from '@jsonforms/core';
 
 @Component({
   selector: 'TableRenderer',
   template: `
-    <table
-      mat-table
-      [dataSource]="data"
-      class="mat-elevation-z8"
-      [trackBy]="trackElement"
-    >
-      <ng-container
-        *ngFor="let item of items"
-        matColumnDef="{{ item.property }}"
-      >
+    <table mat-table [dataSource]="data" class="mat-elevation-z8" [trackBy]="trackElement">
+      <ng-container *ngFor="let item of items" matColumnDef="{{ item.property }}">
         <th mat-header-cell *matHeaderCellDef>{{ item.header }}</th>
         <td mat-cell *matCellDef="let index = index">
-          <jsonforms-outlet
-            [renderProps]="getProps(index, item.props)"
-          ></jsonforms-outlet>
+          <jsonforms-outlet [renderProps]="getProps(index, item.props)"></jsonforms-outlet>
         </td>
       </ng-container>
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   `,
-  styles: ['table {width: 100%;}']
+  styles: [`
+    table { width: 100%; }
+  `]
 })
 export class TableRenderer extends JsonFormsArrayControl {
+
   detailUiSchema: UISchemaElement;
   displayedColumns: string[];
   items: ColumnDescription[];
   readonly columnsToIgnore = ['array', 'object'];
 
-  constructor(jsonformsService: JsonFormsAngularService) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+  ) {
     super(jsonformsService);
   }
+
   trackElement(index: number, _element: any) {
     return index ? index : null;
   }
+
   mapAdditionalProps(props: ArrayControlProps) {
     this.items = this.generateCells(props.schema, props.path);
     this.displayedColumns = this.items.map(item => item.property);
   }
+
   getProps(index: number, props: OwnPropsOfRenderer): OwnPropsOfRenderer {
     const rowPath = Paths.compose(props.path, `${index}`);
     return {
@@ -96,10 +75,8 @@ export class TableRenderer extends JsonFormsArrayControl {
       path: rowPath
     };
   }
-  generateCells = (
-    schema: JsonSchema,
-    rowPath: string
-  ): ColumnDescription[] => {
+
+  generateCells = (schema: JsonSchema, rowPath: string): ColumnDescription[] => {
     if (schema.type === 'object') {
       return this.getValidColumnProps(schema).map(prop => {
         const encProp = encode(prop);
@@ -146,10 +123,8 @@ export class TableRenderer extends JsonFormsArrayControl {
     return [''];
   };
 }
-export const TableRendererTester: RankedTester = rankWith(
-  3,
-  or(isObjectArrayControl, isPrimitiveArrayControl)
-);
+
+export const TableRendererTester: RankedTester = rankWith(3, or(isObjectArrayControl, isPrimitiveArrayControl));
 
 interface ColumnDescription {
   property: string;

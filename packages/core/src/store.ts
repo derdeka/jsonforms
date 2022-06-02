@@ -24,18 +24,14 @@
 */
 
 import { Store } from './util';
-import {
-  JsonFormsCore,
-  JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry
-} from './reducers';
+import { JsonFormsCore, JsonFormsCellRendererRegistryEntry, JsonFormsRendererRegistryEntry, JsonFormsUISchemaRegistryEntry } from './reducers';
 import { JsonFormsI18nState } from './i18n';
 
 /**
  * JSONForms store.
  */
-export interface JsonFormsStore extends Store<JsonFormsState> {}
+export interface JsonFormsStore extends Store<JsonFormsState> {
+}
 
 /**
  * The state shape of JSONForms.

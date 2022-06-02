@@ -22,31 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  and,
-  Categorization,
-  categorizationHasCategory,
-  JsonFormsState,
-  mapStateToLayoutProps,
-  RankedTester,
-  rankWith,
-  uiTypeIs
-} from '@jsonforms/core';
+import { and, Categorization, categorizationHasCategory, JsonFormsState, mapStateToLayoutProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  JsonFormsAngularService,
-  JsonFormsBaseRenderer
-} from '@jsonforms/angular';
+import { JsonFormsAngularService, JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jsonforms-categorization-layout',
   template: `
     <mat-tab-group dynamicHeight="true" [fxHide]="hidden">
-      <mat-tab
-        *ngFor="let category of uischema.elements"
-        [label]="category.label"
-      >
+      <mat-tab *ngFor="let category of uischema.elements" [label]="category.label">
         <div *ngFor="let element of category.elements">
           <jsonforms-outlet [uischema]="element" [path]="path" [schema]="schema"></jsonforms-outlet>
         </div>
@@ -54,13 +39,14 @@ import { Subscription } from 'rxjs';
     </mat-tab-group>
   `
 })
-export class CategorizationTabLayoutRenderer
-  extends JsonFormsBaseRenderer<Categorization>
-  implements OnInit, OnDestroy {
+export class CategorizationTabLayoutRenderer extends JsonFormsBaseRenderer<Categorization> implements OnInit, OnDestroy {
+
   hidden: boolean;
   private subscription: Subscription;
 
-  constructor(private jsonFormsService: JsonFormsAngularService) {
+  constructor(
+    private jsonFormsService: JsonFormsAngularService,
+  ) {
     super();
   }
 
@@ -80,7 +66,4 @@ export class CategorizationTabLayoutRenderer
   }
 }
 
-export const categorizationTester: RankedTester = rankWith(
-  2,
-  and(uiTypeIs('Categorization'), categorizationHasCategory)
-);
+export const categorizationTester: RankedTester = rankWith(2, and(uiTypeIs('Categorization'), categorizationHasCategory));

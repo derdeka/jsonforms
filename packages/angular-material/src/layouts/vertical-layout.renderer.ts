@@ -23,12 +23,7 @@
   THE SOFTWARE.
 */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import {
-  RankedTester,
-  rankWith,
-  uiTypeIs,
-  VerticalLayout
-} from '@jsonforms/core';
+import { RankedTester, rankWith, uiTypeIs, VerticalLayout } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { JsonFormsAngularService } from '@jsonforms/angular';
 
@@ -44,11 +39,13 @@ import { JsonFormsAngularService } from '@jsonforms/angular';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
-  constructor(jsonFormsService: JsonFormsAngularService, changeDetectionRef: ChangeDetectorRef) {
+
+  constructor(
+    jsonFormsService: JsonFormsAngularService,
+    changeDetectionRef: ChangeDetectorRef,
+  ) {
     super(jsonFormsService, changeDetectionRef);
   }
 }
-export const verticalLayoutTester: RankedTester = rankWith(
-  1,
-  uiTypeIs('VerticalLayout')
-);
+
+export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));

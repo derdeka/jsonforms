@@ -23,12 +23,7 @@
   THE SOFTWARE.
 */
 
-import {
-  ADD_DEFAULT_DATA,
-  RegisterDefaultDataAction,
-  REMOVE_DEFAULT_DATA,
-  UnregisterDefaultDataAction
-} from '../actions';
+import { ADD_DEFAULT_DATA, RegisterDefaultDataAction, REMOVE_DEFAULT_DATA, UnregisterDefaultDataAction } from '../actions';
 import { Reducer } from '../util';
 
 export interface JsonFormsDefaultDataRegistryEntry {
@@ -36,14 +31,9 @@ export interface JsonFormsDefaultDataRegistryEntry {
   data: any;
 }
 
-type ValidDefaultDataActions =
-  | RegisterDefaultDataAction
-  | UnregisterDefaultDataAction;
+type ValidDefaultDataActions = RegisterDefaultDataAction | UnregisterDefaultDataAction;
 
-export const defaultDataReducer: Reducer<JsonFormsDefaultDataRegistryEntry[], ValidDefaultDataActions> = (
-  state = [],
-  action
-) => {
+export const defaultDataReducer: Reducer<JsonFormsDefaultDataRegistryEntry[], ValidDefaultDataActions> = (state = [], action) => {
   switch (action.type) {
     case ADD_DEFAULT_DATA:
       return state.concat([
@@ -56,6 +46,4 @@ export const defaultDataReducer: Reducer<JsonFormsDefaultDataRegistryEntry[], Va
   }
 };
 
-export const extractDefaultData = (
-  state: JsonFormsDefaultDataRegistryEntry[]
-): JsonFormsDefaultDataRegistryEntry[] => state;
+export const extractDefaultData = (state: JsonFormsDefaultDataRegistryEntry[]): JsonFormsDefaultDataRegistryEntry[] => state;

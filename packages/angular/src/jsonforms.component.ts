@@ -23,32 +23,13 @@
   THE SOFTWARE.
 */
 import maxBy from 'lodash/maxBy';
-import {
-  ComponentFactoryResolver,
-  Directive,
-  Input,
-  OnDestroy,
-  OnInit,
-  Type,
-  ViewContainerRef
-} from '@angular/core';
-import {
-  createId,
-  isControl,
-  JsonFormsProps,
-  JsonFormsState,
-  JsonSchema,
-  mapStateToJsonFormsRendererProps,
-  OwnPropsOfRenderer,
-  StatePropsOfJsonFormsRenderer,
-  UISchemaElement
-} from '@jsonforms/core';
+import { ComponentFactoryResolver, Directive, Input, OnDestroy, OnInit, Type, ViewContainerRef } from '@angular/core';
+import { createId, isControl, JsonFormsProps, JsonFormsState, JsonSchema, mapStateToJsonFormsRendererProps, OwnPropsOfRenderer, StatePropsOfJsonFormsRenderer, UISchemaElement } from '@jsonforms/core';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
 import { JsonFormsAngularService } from './jsonforms.service';
-
 import { get, isEqual } from 'lodash';
 
 const areEqual = (prevProps: StatePropsOfJsonFormsRenderer, nextProps: StatePropsOfJsonFormsRenderer) => {
@@ -63,15 +44,15 @@ const areEqual = (prevProps: StatePropsOfJsonFormsRenderer, nextProps: StateProp
 @Directive({
   selector: 'jsonforms-outlet'
 })
-export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
-  implements OnInit, OnDestroy {
+export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement> implements OnInit, OnDestroy {
+
   private subscription: Subscription;
   private previousProps: StatePropsOfJsonFormsRenderer;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private jsonformsService: JsonFormsAngularService
+    private jsonformsService: JsonFormsAngularService,
   ) {
     super();
   }
@@ -98,9 +79,8 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
     });
     if (areEqual(this.previousProps, props)) {
       return;
-    } else {
-      this.previousProps = props;
     }
+    this.previousProps = props;
     const { renderers } = props as JsonFormsProps;
     const schema: JsonSchema = this.schema || props.schema;
     const uischema = this.uischema || props.uischema;
@@ -122,12 +102,8 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
       instance.schema = schema;
       instance.path = this.path;
       if (instance instanceof JsonFormsControl) {
-        const controlInstance = instance as JsonFormsControl;
-        if (controlInstance.id === undefined) {
-          const id = isControl(props.uischema)
-            ? createId(props.uischema.scope)
-            : undefined;
-          (instance as JsonFormsControl).id = id;
+        if (instance.id === undefined) {
+          instance.id = isControl(props.uischema) ? createId(props.uischema.scope) : undefined;
         }
       }
     }

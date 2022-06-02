@@ -40,8 +40,7 @@ import Ajv from 'ajv';
  * @param {string} s the string that should be converted to a valid class name
  * @returns {string} the escaped string
  */
-export const convertToValidClassName = (s: string): string =>
-s.replace('#', 'root').replace(new RegExp('/', 'g'), '_');
+export const convertToValidClassName = (s: string): string => s.replace('#', 'root').replace(new RegExp('/', 'g'), '_');
 
 export const formatErrorMessage = (errors: string[]) => {
  if (errors === undefined || errors === null) {
@@ -51,9 +50,7 @@ export const formatErrorMessage = (errors: string[]) => {
  return errors.join('\n');
 };
 
-export const hasType = (jsonSchema: JsonSchema, expected: string): boolean => {
- return includes(deriveTypes(jsonSchema), expected);
-};
+export const hasType = (jsonSchema: JsonSchema, expected: string): boolean => includes(deriveTypes(jsonSchema), expected);
 
 /**
 * Derives the type of the jsonSchema element
@@ -68,10 +65,7 @@ export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
  if (isArray(jsonSchema.type)) {
    return jsonSchema.type;
  }
- if (
-   !isEmpty(jsonSchema.properties) ||
-   !isEmpty(jsonSchema.additionalProperties)
- ) {
+ if (!isEmpty(jsonSchema.properties) || !isEmpty(jsonSchema.additionalProperties)) {
    return ['object'];
  }
  if (!isEmpty(jsonSchema.items)) {
@@ -79,10 +73,7 @@ export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
  }
 
  if (!isEmpty(jsonSchema.allOf)) {
-   const allOfType = find(
-     jsonSchema.allOf,
-     (schema: JsonSchema) => deriveTypes(schema).length !== 0
-   );
+   const allOfType = find(jsonSchema.allOf, (schema: JsonSchema) => deriveTypes(schema).length !== 0);
 
    if (allOfType) {
      return deriveTypes(allOfType);
@@ -96,11 +87,7 @@ export const deriveTypes = (jsonSchema: JsonSchema): string[] => {
 * Convenience wrapper around resolveData and resolveSchema.
 */
 export const Resolve: {
- schema(
-   schema: JsonSchema,
-   schemaPath: string,
-   rootSchema: JsonSchema
- ): JsonSchema;
+ schema(schema: JsonSchema, schemaPath: string, rootSchema: JsonSchema): JsonSchema;
  data(data: any, path: string): any;
 } = {
  schema: resolveSchema,
@@ -108,8 +95,7 @@ export const Resolve: {
 };
 
 // Paths --
-const fromScopable = (scopable: Scopable) =>
- toDataPathSegments(scopable.scope).join('.');
+const fromScopable = (scopable: Scopable) => toDataPathSegments(scopable.scope).join('.');
 
 export const Paths = {
  compose: composePaths,

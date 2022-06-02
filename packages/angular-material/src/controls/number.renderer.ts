@@ -24,15 +24,7 @@
 */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import {
-  getLocale,
-  isIntegerControl,
-  isNumberControl,
-  or,
-  RankedTester,
-  rankWith,
-  StatePropsOfControl
-} from '@jsonforms/core';
+import { getLocale, isIntegerControl, isNumberControl, or, RankedTester, rankWith, StatePropsOfControl } from '@jsonforms/core';
 import merge from 'lodash/merge';
 
 @Component({
@@ -40,16 +32,7 @@ import merge from 'lodash/merge';
   template: `
     <mat-form-field fxFlex [fxHide]="hidden">
       <mat-label>{{ label }}</mat-label>
-      <input
-        matInput
-        (input)="onChange($event)"
-        [value]="getValue()"
-        [id]="id"
-        [formControl]="form"
-        [min]="min"
-        [max]="max"
-        [step]="multipleOf"
-      />
+      <input matInput (input)="onChange($event)" [value]="getValue()" [id]="id" [formControl]="form" [min]="min" [max]="max" [step]="multipleOf" />
       <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
@@ -57,6 +40,7 @@ import merge from 'lodash/merge';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NumberControlRenderer extends JsonFormsControl {
+
   private readonly MAXIMUM_FRACTIONAL_DIGITS = 20;
 
   oldValue: string;
@@ -67,14 +51,14 @@ export class NumberControlRenderer extends JsonFormsControl {
   numberFormat: Intl.NumberFormat;
   decimalSeparator: string;
 
-  constructor(jsonformsService: JsonFormsAngularService) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+  ) {
     super(jsonformsService);
   }
 
   onChange(ev: any) {
-    const data = this.oldValue
-      ? ev.target.value.replace(this.oldValue, '')
-      : ev.target.value;
+    const data = this.oldValue ? ev.target.value.replace(this.oldValue, '') : ev.target.value;
     // ignore these
     if (
       data === '.' ||
@@ -127,9 +111,7 @@ export class NumberControlRenderer extends JsonFormsControl {
 
   mapAdditionalProps(props:StatePropsOfControl) {
     if (this.scopedSchema) {
-      const defaultStep = isNumberControl(this.uischema, this.rootSchema, this.rootSchema)
-        ? 0.1
-        : 1;
+      const defaultStep = isNumberControl(this.uischema, this.rootSchema, this.rootSchema) ? 0.1 : 1;
       this.min = this.scopedSchema.minimum;
       this.max = this.scopedSchema.maximum;
       this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
@@ -153,7 +135,4 @@ export class NumberControlRenderer extends JsonFormsControl {
     this.decimalSeparator = example.charAt(1);
   }
 }
-export const NumberControlRendererTester: RankedTester = rankWith(
-  2,
-  or(isNumberControl, isIntegerControl)
-);
+export const NumberControlRendererTester: RankedTester = rankWith(2, or(isNumberControl, isIntegerControl));

@@ -24,12 +24,7 @@
 */
 
 import { RankedTester } from '../testers';
-import {
-  ADD_CELL,
-  AddCellRendererAction,
-  REMOVE_CELL,
-  RemoveCellRendererAction
-} from '../actions';
+import { ADD_CELL, AddCellRendererAction, REMOVE_CELL, RemoveCellRendererAction } from '../actions';
 import { Reducer } from '../util';
 
 type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
@@ -41,10 +36,7 @@ export interface JsonFormsCellRendererRegistryEntry {
   cell: any;
 }
 
-export const cellReducer: Reducer<JsonFormsCellRendererRegistryState, ValidCellReducerActions> = (
-  state = [],
-  { type, tester, cell }
-) => {
+export const cellReducer: Reducer<JsonFormsCellRendererRegistryState, ValidCellReducerActions> = (state = [], { type, tester, cell }) => {
   switch (type) {
     case ADD_CELL:
       return state.concat([{ tester, cell }]);

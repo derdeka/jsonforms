@@ -31,12 +31,7 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
   template: `
     <mat-form-field fxFlex [fxHide]="hidden">
       <mat-label>{{ label }}</mat-label>
-      <textarea
-        matInput
-        (input)="onChange($event)"
-        [id]="id"
-        [formControl]="form"
-      ></textarea>
+      <textarea matInput (input)="onChange($event)" [id]="id" [formControl]="form"></textarea>
       <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
@@ -44,12 +39,14 @@ import { isMultiLineControl, RankedTester, rankWith } from '@jsonforms/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextAreaRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JsonFormsAngularService) {
+
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+  ) {
     super(jsonformsService);
   }
+  
   getEventValue = (event: any) => event.target.value;
 }
-export const TextAreaRendererTester: RankedTester = rankWith(
-  2,
-  isMultiLineControl
-);
+
+export const TextAreaRendererTester: RankedTester = rankWith(2, isMultiLineControl);

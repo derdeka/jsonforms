@@ -25,15 +25,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import {
-  Actions,
-  composeWithUi,
-  ControlElement,
-  isEnumControl,
-  OwnPropsOfControl,
-  RankedTester,
-  rankWith
-} from '@jsonforms/core';
+import { Actions, composeWithUi, ControlElement, isEnumControl, OwnPropsOfControl, RankedTester, rankWith } from '@jsonforms/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { startWith } from 'rxjs/operators';
@@ -66,24 +58,9 @@ import { startWith } from 'rxjs/operators';
   template: `
     <mat-form-field fxFlex [fxHide]="hidden">
       <mat-label>{{ label }}</mat-label>
-      <input
-        matInput
-        type="text"
-        (change)="onChange($event)"
-        [id]="id"
-        [formControl]="form"
-        [matAutocomplete]="auto"
-        (keydown)="updateFilter($event)"
-      />
-      <mat-autocomplete
-        autoActiveFirstOption
-        #auto="matAutocomplete"
-        (optionSelected)="onSelect($event)"
-      >
-        <mat-option
-          *ngFor="let option of filteredOptions | async"
-          [value]="option"
-        >
+      <input matInput type="text" (change)="onChange($event)" [id]="id" [formControl]="form" [matAutocomplete]="auto" (keydown)="updateFilter($event)" />
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelect($event)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
           {{ option }}
         </mat-option>
       </mat-autocomplete>
@@ -94,13 +71,17 @@ import { startWith } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutocompleteControlRenderer extends JsonFormsControl {
+
   @Input() options: string[];
   filteredOptions: Observable<string[]>;
   shouldFilter: boolean;
 
-  constructor(jsonformsService: JsonFormsAngularService) {
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+  ) {
     super(jsonformsService);
   }
+
   getEventValue = (event: any) => event.target.value;
 
   ngOnInit() {
@@ -129,13 +110,10 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
   }
 
   filter(val: string): string[] {
-    return (this.options || this.scopedSchema.enum || []).filter(
-      option =>
-        !this.shouldFilter ||
-        !val ||
-        option.toLowerCase().indexOf(val.toLowerCase()) === 0
-    );
+    return (this.options || this.scopedSchema.enum || [])
+      .filter(option => !this.shouldFilter || !val || option.toLowerCase().indexOf(val.toLowerCase()) === 0);
   }
+
   protected getOwnProps(): OwnPropsOfAutoComplete {
     return {
       ...super.getOwnProps(),

@@ -30,26 +30,17 @@ import { NOT_APPLICABLE } from '../testers';
 import { JsonSchema, UISchemaElement } from '../models';
 import { Reducer } from '../util';
 
-export type UISchemaTester = (
-  schema: JsonSchema,
-  schemaPath: string,
-  path: string
-) => number;
+export type UISchemaTester = (schema: JsonSchema, schemaPath: string, path: string) => number;
 
 export interface JsonFormsUISchemaRegistryEntry {
   tester: UISchemaTester;
   uischema: UISchemaElement;
 }
 
-export const uischemaRegistryReducer: Reducer<JsonFormsUISchemaRegistryEntry[], UISchemaActions> = (
-  state = [],
-  action
-) => {
+export const uischemaRegistryReducer: Reducer<JsonFormsUISchemaRegistryEntry[], UISchemaActions> = (state = [], action) => {
   switch (action.type) {
     case ADD_UI_SCHEMA:
-      return state
-        .slice()
-        .concat({ tester: action.tester, uischema: action.uischema });
+      return state.slice().concat({ tester: action.tester, uischema: action.uischema });
     case REMOVE_UI_SCHEMA:
       const copy = state.slice();
       remove(copy, entry => entry.tester === action.tester);
@@ -59,20 +50,9 @@ export const uischemaRegistryReducer: Reducer<JsonFormsUISchemaRegistryEntry[], 
   }
 };
 
-export const findMatchingUISchema = (
-  state: JsonFormsUISchemaRegistryEntry[]
-) => (
-  jsonSchema: JsonSchema,
-  schemaPath: string,
-  path: string
-): UISchemaElement => {
-  const match = maxBy(state, entry =>
-    entry.tester(jsonSchema, schemaPath, path)
-  );
-  if (
-    match !== undefined &&
-    match.tester(jsonSchema, schemaPath, path) !== NOT_APPLICABLE
-  ) {
+export const findMatchingUISchema = (state: JsonFormsUISchemaRegistryEntry[]) => (jsonSchema: JsonSchema, schemaPath: string, path: string): UISchemaElement => {
+  const match = maxBy(state, entry =>entry.tester(jsonSchema, schemaPath, path));
+  if (match !== undefined && match.tester(jsonSchema, schemaPath, path) !== NOT_APPLICABLE) {
     return match.uischema;
   }
   return undefined;

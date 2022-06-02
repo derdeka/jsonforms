@@ -26,33 +26,11 @@
 import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
 import type { JsonFormsCellRendererRegistryEntry } from '../reducers';
-import {
-  getAjv,
-  getConfig,
-  getData,
-  getErrorAt,
-  getSchema,
-  getTranslator,
-} from '../reducers';
+import { getAjv, getConfig, getData, getErrorAt, getSchema, getTranslator } from '../reducers';
 import { AnyAction, Dispatch } from './type';
-import {
-  formatErrorMessage,
-  Resolve,
-} from './util';
-import {
-  isInherentlyEnabled,
-  isVisible,
-} from './runtime';
-import {
-  DispatchPropsOfControl,
-  EnumOption,
-  enumToEnumOptionMapper,
-  mapDispatchToControlProps,
-  oneOfToEnumOptionMapper,
-  OwnPropsOfControl,
-  OwnPropsOfEnum,
-  StatePropsOfScopedRenderer,
-} from './renderer';
+import { formatErrorMessage, Resolve } from './util';
+import { isInherentlyEnabled, isVisible } from './runtime';
+import { DispatchPropsOfControl, EnumOption, enumToEnumOptionMapper, mapDispatchToControlProps, oneOfToEnumOptionMapper, OwnPropsOfControl, OwnPropsOfEnum, StatePropsOfScopedRenderer } from './renderer';
 import { JsonFormsState } from '../store';
 import { JsonSchema } from '../models';
 import { getI18nKeyPrefix } from '../i18n';
@@ -71,28 +49,28 @@ export interface StatePropsOfCell extends StatePropsOfScopedRenderer {
   rootSchema: JsonSchema;
 }
 
-export interface OwnPropsOfEnumCell extends OwnPropsOfCell, OwnPropsOfEnum {}
+export interface OwnPropsOfEnumCell extends OwnPropsOfCell, OwnPropsOfEnum {
+}
 
 /**
  * State props of a cell for enum cell
  */
-export interface StatePropsOfEnumCell
-  extends StatePropsOfCell,
-    OwnPropsOfEnum {}
+export interface StatePropsOfEnumCell extends StatePropsOfCell, OwnPropsOfEnum {
+}
 
 /**
  * Props of an enum cell.
  */
-export interface EnumCellProps
-  extends StatePropsOfEnumCell,
-    DispatchPropsOfControl {}
+export interface EnumCellProps extends StatePropsOfEnumCell, DispatchPropsOfControl {
+}
 
 export type DispatchPropsOfCell = DispatchPropsOfControl;
 
 /**
  * Props of a cell.
  */
-export interface CellProps extends StatePropsOfCell, DispatchPropsOfCell {}
+export interface CellProps extends StatePropsOfCell, DispatchPropsOfCell {
+}
 /**
  * Registers the given cell renderer when a JSON Forms store is created.
  * @param {RankedTester} tester
@@ -110,16 +88,10 @@ export interface DispatchCellStateProps extends StatePropsOfCell {
  * @param ownProps any own props
  * @returns {StatePropsOfCell} state props of a cell
  */
-export const mapStateToCellProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfCell
-): StatePropsOfCell => {
+export const mapStateToCellProps = (state: JsonFormsState, ownProps: OwnPropsOfCell): StatePropsOfCell => {
   const { id, schema, path, uischema, renderers, cells } = ownProps;
   const rootData = getData(state);
-  const visible =
-    ownProps.visible !== undefined
-      ? ownProps.visible
-      : isVisible(uischema, rootData, undefined, getAjv(state));
+  const visible = ownProps.visible !== undefined ? ownProps.visible : isVisible(uischema, rootData, undefined, getAjv(state));
 
   const rootSchema = getSchema(state);
   const config = getConfig(state);
@@ -138,19 +110,10 @@ export const mapStateToCellProps = (
   } else if (typeof ownProps.enabled === 'boolean') {
     enabled = ownProps.enabled;
   } else {
-    enabled = isInherentlyEnabled(
-      state,
-      ownProps,
-      uischema,
-      schema || rootSchema,
-      rootData,
-      config
-    );
+    enabled = isInherentlyEnabled(state, ownProps, uischema, schema || rootSchema, rootData, config);
   }
 
-  const errors = formatErrorMessage(
-    union(getErrorAt(path, schema)(state).map(error => error.message))
-  );
+  const errors = formatErrorMessage(union(getErrorAt(path, schema)(state).map(error => error.message)));
   const isValid = isEmpty(errors);
 
   return {
@@ -170,10 +133,7 @@ export const mapStateToCellProps = (
   };
 };
 
-export const mapStateToDispatchCellProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfCell
-): DispatchCellStateProps => {
+export const mapStateToDispatchCellProps = (state: JsonFormsState, ownProps: OwnPropsOfCell): DispatchCellStateProps => {
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const { renderers, cells, ...otherOwnProps } = ownProps;
   return {
@@ -183,7 +143,8 @@ export const mapStateToDispatchCellProps = (
   };
 };
 
-export interface DispatchCellProps extends DispatchCellStateProps {}
+export interface DispatchCellProps extends DispatchCellStateProps {
+}
 
 /**
  * Default mapStateToCellProps for enum cell. Options is used for populating dropdown list
@@ -191,10 +152,7 @@ export interface DispatchCellProps extends DispatchCellStateProps {}
  * @param ownProps
  * @returns {StatePropsOfEnumCell}
  */
-export const defaultMapStateToEnumCellProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfEnumCell
-): StatePropsOfEnumCell => {
+export const defaultMapStateToEnumCellProps = (state: JsonFormsState, ownProps: OwnPropsOfEnumCell): StatePropsOfEnumCell => {
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
@@ -224,10 +182,7 @@ export const defaultMapStateToEnumCellProps = (
  * @param ownProps
  * @returns {StatePropsOfEnumCell}
  */
-export const mapStateToOneOfEnumCellProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfEnumCell
-): StatePropsOfEnumCell => {
+export const mapStateToOneOfEnumCellProps = (state: JsonFormsState, ownProps: OwnPropsOfEnumCell): StatePropsOfEnumCell => {
   const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options: EnumOption[] =
     ownProps.options ||
@@ -250,19 +205,15 @@ export const mapStateToOneOfEnumCellProps = (
  *
  * @type {(dispatch) => {handleChange(path, value): void}}
  */
-export const mapDispatchToCellProps: (
-  dispatch: Dispatch<AnyAction>
-) => DispatchPropsOfControl = mapDispatchToControlProps;
+export const mapDispatchToCellProps: (dispatch: Dispatch<AnyAction>) => DispatchPropsOfControl = mapDispatchToControlProps;
 
 /**
  * Default dispatch to control props which can be customized to set handleChange action
- *
+ * 
+ * TODO: ownProps types
  */
-export const defaultMapDispatchToControlProps =
-  // TODO: ownProps types
-  (dispatch: Dispatch<AnyAction>, ownProps: any): DispatchPropsOfControl => {
+export const defaultMapDispatchToControlProps = (dispatch: Dispatch<AnyAction>, ownProps: any): DispatchPropsOfControl => {
     const { handleChange } = mapDispatchToCellProps(dispatch);
-
     return {
       handleChange: ownProps.handleChange || handleChange
     };

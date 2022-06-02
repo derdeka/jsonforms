@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-const move = (array: any[], index: number, delta: number) => {
+const move = (array: any[], index: number, delta: number): void => {
   const newIndex: number = index + delta;
   if (newIndex < 0 || newIndex >= array.length) {
     return;
@@ -32,12 +32,6 @@ const move = (array: any[], index: number, delta: number) => {
   array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]);
 };
 
-const moveUp = (array: any[], toMove: number) => {
-  move(array, toMove, -1);
-};
+export const moveUp = (array: any[], toMove: number) => move(array, toMove, -1);
 
-const moveDown = (array: any[], toMove: number) => {
-  move(array, toMove, 1);
-};
-
-export { moveUp, moveDown };
+export const moveDown = (array: any[], toMove: number) => move(array, toMove, 1);

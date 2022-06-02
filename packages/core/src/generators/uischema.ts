@@ -26,15 +26,7 @@
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import keys from 'lodash/keys';
-import {
-  ControlElement,
-  isGroup,
-  isLayout,
-  JsonSchema,
-  LabelElement,
-  Layout,
-  UISchemaElement
-} from '../models';
+import { ControlElement, isGroup, isLayout, JsonSchema, LabelElement, Layout, UISchemaElement } from '../models';
 import { deriveTypes, encode, resolveSchema } from '../util';
 
 /**
@@ -61,10 +53,7 @@ export const createControlElement = (ref: string): ControlElement => ({
  * @param layoutType The type of the layout to create.
  * @returns the wrapped uiSchema.
  */
-const wrapInLayoutIfNecessary = (
-  uischema: UISchemaElement,
-  layoutType: string
-): Layout => {
+const wrapInLayoutIfNecessary = (uischema: UISchemaElement, layoutType: string): Layout => {
   if (!isEmpty(uischema) && !isLayout(uischema)) {
     const verticalLayout: Layout = createLayout(layoutType);
     verticalLayout.elements.push(uischema);
@@ -112,14 +101,7 @@ const isCombinator = (jsonSchema: JsonSchema): boolean => {
   );
 };
 
-const generateUISchema = (
-  jsonSchema: JsonSchema,
-  schemaElements: UISchemaElement[],
-  currentRef: string,
-  schemaName: string,
-  layoutType: string,
-  rootSchema?: JsonSchema
-): UISchemaElement => {
+const generateUISchema = (jsonSchema: JsonSchema, schemaElements: UISchemaElement[], currentRef: string, schemaName: string, layoutType: string, rootSchema?: JsonSchema): UISchemaElement => {
   if (!isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
     return generateUISchema(
       resolveSchema(rootSchema, jsonSchema.$ref, rootSchema),
@@ -166,14 +148,7 @@ const generateUISchema = (
         if (value.$ref !== undefined) {
           value = resolveSchema(rootSchema, value.$ref, rootSchema);
         }
-        generateUISchema(
-          value,
-          layout.elements,
-          ref,
-          propName,
-          layoutType,
-          rootSchema
-        );
+        generateUISchema(value, layout.elements, ref, propName, layoutType, rootSchema);
       });
     }
 
@@ -207,12 +182,7 @@ const generateUISchema = (
  * @param {string} layoutType the desired layout type for the root layout
  *        of the generated UI schema
  */
-export const generateDefaultUISchema = (
-  jsonSchema: JsonSchema,
-  layoutType = 'VerticalLayout',
-  prefix = '#',
-  rootSchema = jsonSchema
-): UISchemaElement =>
+export const generateDefaultUISchema = (jsonSchema: JsonSchema, layoutType: string = 'VerticalLayout', prefix: string = '#', rootSchema: JsonSchema = jsonSchema): UISchemaElement =>
   wrapInLayoutIfNecessary(
     generateUISchema(jsonSchema, [], prefix, '', layoutType, rootSchema),
     layoutType

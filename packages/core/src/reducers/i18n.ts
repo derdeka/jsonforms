@@ -37,16 +37,10 @@ export const i18nReducer: Reducer<JsonFormsI18nState, I18nActions> = (state = de
   switch (action.type) {
     case UPDATE_I18N: {
       const locale = action.locale ?? defaultJsonFormsI18nState.locale;
-      const translate =
-        action.translator ?? defaultJsonFormsI18nState.translate;
-      const translateError =
-        action.errorTranslator ?? defaultJsonFormsI18nState.translateError;
+      const translate = action.translator ?? defaultJsonFormsI18nState.translate;
+      const translateError = action.errorTranslator ?? defaultJsonFormsI18nState.translateError;
 
-      if (
-        locale !== state.locale ||
-        translate !== state.translate ||
-        translateError !== state.translateError
-      ) {
+      if (locale !== state.locale || translate !== state.translate || translateError !== state.translateError) {
         return {
           ...state,
           locale,

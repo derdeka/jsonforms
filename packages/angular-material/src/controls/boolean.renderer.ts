@@ -29,18 +29,8 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
 @Component({
   selector: 'BooleanControlRenderer',
   template: `
-    <div
-      [fxHide]="hidden"
-      fxLayout="column"
-      fxLayoutAlign="center"
-      style="height:100%"
-    >
-      <mat-checkbox
-        (change)="onChange($event)"
-        [checked]="isChecked()"
-        [disabled]="!isEnabled()"
-        [id]="id"
-      >
+    <div [fxHide]="hidden" fxLayout="column" fxLayoutAlign="center" style="height:100%">
+      <mat-checkbox (change)="onChange($event)" [checked]="isChecked()" [disabled]="!isEnabled()" [id]="id">
         {{ label }}
       </mat-checkbox>
       <mat-hint class="mat-caption" *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
@@ -50,10 +40,16 @@ import { isBooleanControl, RankedTester, rankWith } from '@jsonforms/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BooleanControlRenderer extends JsonFormsControl {
-  constructor(jsonformsService: JsonFormsAngularService, private changeDetectionRef: ChangeDetectorRef) {
+
+  constructor(
+    jsonformsService: JsonFormsAngularService,
+    private changeDetectionRef: ChangeDetectorRef,
+  ) {
     super(jsonformsService);
   }
+
   isChecked = () => this.data || false;
+
   getEventValue = (event: any) => event.checked;
 
   mapAdditionalProps() {
